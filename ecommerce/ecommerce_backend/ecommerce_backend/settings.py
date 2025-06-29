@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'store',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -79,12 +80,12 @@ WSGI_APPLICATION = 'ecommerce_backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        # 'NAME': 'ecommerce_db',
-        # 'USER': 'root',
-        # 'PASSWORD': 'SQLServer@2025',
-        # 'HOST': 'localhost',
-        # 'PORT': '3306',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'ecommerce_db',
+        'USER': 'root',
+        'PASSWORD': 'Server@2025',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
@@ -130,3 +131,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True #For development only
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,  # default page
+}
