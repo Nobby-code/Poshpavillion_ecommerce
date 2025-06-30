@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Product
+from .models import Category, Product, Cart, CartItem
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,3 +31,26 @@ class ProductSerializer(serializers.ModelSerializer):
             'created_at'
         ]
         read_only_fields = ['created_at']
+
+class CartItemSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True)
+    product_id = serializers.PrimaryKeyRelatedField(
+        queryset=Product.objects.all(), source='product', write_only=True
+    )
+
+    class Meta:
+        model = CartItem
+        fields = ['id', 'product', 'product_id', 'quantity']
+
+class CartSerializer(serializers.ModelSerializer):
+    items = CartItemSerializer(many=True, read_only=True)
+    total_price = serializers.SerializerMethodField() #For cart totals
+
+    class Meta:
+        model = Cart
+        fields = ['id', 'created_at', 'items', 'total_price']
+        read_only_fields = ['id', 'created_at']
+    
+    def get_total_price(self, cart):
+        total = sum(item.product.price * item.quantity for item in cart.items.all())
+        return f"{total:.2f}"
