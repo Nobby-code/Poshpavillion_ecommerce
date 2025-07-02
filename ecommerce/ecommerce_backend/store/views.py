@@ -1,19 +1,26 @@
 from django.shortcuts import render
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, filters
-from .models import Category, Product, Cart, CartItem, Order, OrderItem
+from .models import Category, Product, Cart, CartItem, Order, OrderItem, Payment
 from .serializers import CategorySerializer, ProductSerializer, CartSerializer,CartItemSerializer, OrderSerializer, OrderItemSerializer
 from .filters import ProductFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status  
+from .permissions import IsAdminOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .mpesa import lipa_na_mpesa
 
 
 # Create your views here.
 class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
+    queryset = Category.objects.all().order_by('name')
     serializer_class = CategorySerializer
+    permission_classes = [IsAdminOrReadOnly]
     
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -21,6 +28,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
     filterset_class = ProductFilter
+    permission_classes = [IsAdminOrReadOnly]
     search_fields = ['name', 'description']
     ordering_fields = ['price', 'created_at', 'stock']
 
@@ -53,9 +61,15 @@ class CartItemViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     '''Order functionality'''
     serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
 
     def get_queryset(self):
+        # return Order.objects.filter(user=self.request.user)
+        # Admin sees all, user sees only their orders
+        if self.request.user.is_staff:
+            return Order.objects.all()
         return Order.objects.filter(user=self.request.user)
 
     @action(detail=False, methods=['post'], url_path='checkout/(?P<cart_id>[^/.]+)')
@@ -69,7 +83,16 @@ class OrderViewSet(viewsets.ModelViewSet):
             return Response({'error': 'Cart is empty'}, status=400)
 
         # Create the order
-        order = Order.objects.create(user=request.user)
+        order = Order.objects.create(
+            user=request.user,
+            cart=cart,
+            full_name=request.data['full_name'],
+            phone_number=request.data['phone_number'],
+            address=request.data['address'],
+            city=request.data['city'],
+            postal_code=request.data.get('postal_code', ''),
+            country=request.data['country'],
+            )
 
         # Copy cart items into the order
         for item in cart.items.all():
@@ -84,3 +107,53 @@ class OrderViewSet(viewsets.ModelViewSet):
         cart.items.all().delete()
 
         return Response(OrderSerializer(order).data, status=201)
+
+@api_view(['POST'])
+def initiate_payment(request):
+    phone = request.data.get('phone')
+    amount = request.data.get('amount')
+
+    if not phone or not amount:
+        return Response({'error': 'Phone and amount are required.'}, status=400)
+
+    result = lipa_na_mpesa(phone, int(amount))
+    return Response(result)
+
+# @api_view(['POST'])
+# def mpesa_callback(request):
+#     '''mpesa callback'''
+#     print("✅ M-Pesa Callback Received:")
+#     print(request.data)
+
+#     # You can log to DB or update Order status here
+#     return Response({
+#         "ResultCode": 0,
+#         "ResultDesc": "Accepted"
+#     })
+
+@api_view(['POST'])
+def mpesa_callback(request):
+    print("✅ M-Pesa Callback Received")
+    print(request.data)
+
+    try:
+        callback = request.data['Body']['stkCallback']
+        if callback['ResultCode'] == 0:
+            metadata = callback['CallbackMetadata']['Item']
+            data = {item['Name']: item.get('Value') for item in metadata}
+
+            Payment.objects.create(
+                receipt_number=data.get('MpesaReceiptNumber'),
+                phone_number=str(data.get('PhoneNumber')),
+                amount=data.get('Amount'),
+                checkout_request_id=callback['CheckoutRequestID'],
+                status='Success'
+            )
+            print("✅ Payment saved!")
+        else:
+            print("❌ Payment failed:", callback['ResultDesc'])
+
+    except Exception as e:
+        print("❌ Error parsing callback:", e)
+
+    return Response({"ResultCode": 0, "ResultDesc": "Accepted"})

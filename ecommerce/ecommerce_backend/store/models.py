@@ -56,8 +56,20 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
 
+     # checkout address fields:
+    full_name = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=20)
+    address = models.CharField(max_length=255, default='Nairobi', blank=True)
+    city = models.CharField(max_length=100)
+    postal_code = models.CharField(max_length=20, blank=True)
+    country = models.CharField(max_length=100, default='Kenya')
+
     def __str__(self):
         return f"===Order {self.id} by {self.user.username}==="
+    
+    def get_total_price(self):
+        '''To get total price of  the order'''
+        return sum(item.get_total_price() for item in self.items.all())
     
 class OrderItem(models.Model):
     '''List of ordered items with their totals'''
@@ -69,3 +81,16 @@ class OrderItem(models.Model):
     def get_total_price(self):
         '''Total cost of the order'''
         return self.price * self.quantity
+    
+class Payment(models.Model):
+    '''Payment model to store payment details'''
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='payments', default=1) #link to order
+    receipt_number = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=15)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    transaction_date = models.DateTimeField(auto_now_add=True)
+    checkout_request_id = models.CharField(max_length=255, null=True, blank=True)
+    status = models.CharField(max_length=50, default='Success')  # or 'Failed'
+
+    def __str__(self):
+        return f"TransId: {self.receipt_number} - Amount paid: {self.amount} TransDate: {self.transaction_date.strftime('%Y-%m-%d %H:%M:%S')}, Status:{self.status}"

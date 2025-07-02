@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_nested.routers import NestedDefaultRouter
-from .views import CategoryViewSet, ProductViewSet, CartViewSet, CartItemViewSet, OrderViewSet
+from .views import CategoryViewSet, ProductViewSet, CartViewSet, CartItemViewSet, OrderViewSet, mpesa_callback, initiate_payment
 
 router = DefaultRouter()
 router.register('categories', CategoryViewSet)
@@ -18,4 +18,6 @@ router.register('orders', OrderViewSet, basename='order')
 urlpatterns = [
     path('', include(router.urls)),
     path('', include(cart_router.urls)),
+    path('mpesa/confirmation/', mpesa_callback),
+    path('mpesa/pay/', initiate_payment),
 ]

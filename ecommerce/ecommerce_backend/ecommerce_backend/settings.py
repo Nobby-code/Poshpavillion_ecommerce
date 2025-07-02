@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-at2*9p))@p68@**y_2-+vlo#0gfr%3ney1v_rrnyu&i!)+i2h!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    '07f9-2c0f-fe38-2192-762e-a186-423f-7f43-1914.ngrok-free.app', # ngrok url for testing
+]
 
 
 # Application definition
@@ -147,3 +151,12 @@ REST_FRAMEWORK = {
 
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = BASE_DIR / 'media'
+
+MPESA_CONSUMER_KEY = ' uRcZmZtlCSPVXo4heoSeu6nCjwRF25AIr2bHrdMarJU06uqd'
+MPESA_CONSUMER_SECRET = 'Wj9cIXpjAqAznGRyCoAD2G1YWPVhuZbIvGRJdyfJcsjiUtyLFSDoaHgGAnsDnYa8'
+MPESA_SHORTCODE = '174379'  # Sandbox shortcode
+MPESA_PASSKEY = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919'
+
+MPESA_CALLBACK_URL = 'https://07f9-2c0f-fe38-2192-762e-a186-423f-7f43-1914.ngrok-free.app/api/mpesa/confirmation/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For dev
