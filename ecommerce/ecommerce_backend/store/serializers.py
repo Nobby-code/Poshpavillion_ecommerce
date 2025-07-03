@@ -77,3 +77,9 @@ class OrderSerializer(serializers.ModelSerializer):
     
     def get_total_price(self, obj):
         return obj.get_total_price()
+    
+    def create(self, validated_data):
+        '''Override create method to set the user automatically'''
+        request = self.context.get('request')
+        validated_data['user'] = request.user  # Automatically set the logged-in user
+        return super().create(validated_data)

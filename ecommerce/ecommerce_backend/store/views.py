@@ -85,7 +85,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         # Create the order
         order = Order.objects.create(
             user=request.user,
-            cart=cart,
+            # cart=cart,
             full_name=request.data['full_name'],
             phone_number=request.data['phone_number'],
             address=request.data['address'],
