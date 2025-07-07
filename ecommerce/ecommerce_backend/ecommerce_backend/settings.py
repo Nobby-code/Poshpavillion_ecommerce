@@ -56,7 +56,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'ecommerce_backend.urls'
@@ -136,9 +136,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CORS_ALLOW_ALL_ORIGINS = True #For development only
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    ]
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:3000',
+#     ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -153,8 +153,8 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,  # default page
 }
 
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 MPESA_CONSUMER_KEY = ' uRcZmZtlCSPVXo4heoSeu6nCjwRF25AIr2bHrdMarJU06uqd'
 MPESA_CONSUMER_SECRET = 'Wj9cIXpjAqAznGRyCoAD2G1YWPVhuZbIvGRJdyfJcsjiUtyLFSDoaHgGAnsDnYa8'
@@ -164,3 +164,5 @@ MPESA_PASSKEY = 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c91
 MPESA_CALLBACK_URL = 'https://07f9-2c0f-fe38-2192-762e-a186-423f-7f43-1914.ngrok-free.app/api/mpesa/confirmation/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For dev
+
+CORS_ALLOW_ALL_ORIGINS = True  # (for testing only!)

@@ -25,7 +25,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'price',
             'category',
             'category_id',
-            # 'image',
+            'image',
             'stock',
             'is_available',
             'created_at'
