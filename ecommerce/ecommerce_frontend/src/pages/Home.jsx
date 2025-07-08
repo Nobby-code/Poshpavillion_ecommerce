@@ -33,7 +33,7 @@ const Home = () => {
                 className="card-img-top"
                 style={{ objectFit: "cover", height: "300px" }}
               />
-              <div className="card-body">
+              <div className="card-body text-start">
                 <h5 className="card-title">{product.name}</h5>
                 <h3 className="card-text">{product.description}</h3>
                 {/* <h3 className="card-text">{product.stock}</h3> */}

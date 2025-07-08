@@ -12,6 +12,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import CategoryList from './pages/CategoryList';
+import Carousel from './pages/Carousel';
 
 function App() {
   const [count, setCount] = useState(0)
@@ -20,6 +22,8 @@ function App() {
     <Router>
       <Navbar />
       <Header />
+      {/* <CategoryList /> */}
+      <Carousel />
       <div className="container mt-4">
         <Routes>
           <Route path="/" element={<Home />} />
