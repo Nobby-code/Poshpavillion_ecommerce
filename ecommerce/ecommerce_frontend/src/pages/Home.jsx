@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
+import { useCart } from "./CartContext";
+// import { useToast } from '../components/ToastContext';
+import { useToast } from "../components/ToastContext"; // ✅ Import useToast hook
+// import { useCart } from "./CartContext";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
-
+  const { addToCart } = useCart();
+  const [addedProductId, setAddedProductId] = useState(null); // track recently added product
+  const { showToast } = useToast(); // ✅ Get showToast function
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_BASE_URL}/products/`)
       .then((res) => res.json())
@@ -49,7 +55,21 @@ const Home = () => {
                       : "Out of stock"}
                   </small>
                 </p>
-                <button className="btn btn-primary py-3 w-100">Add to Cart</button>
+                <button
+                  className="btn btn-primary py-3 w-100"
+                  onClick={() => {
+                    addToCart(product);
+                    showToast(`${product.name} added to cart!`); // Show success toast message
+                    // setTimeout(() => setAddedProductId(null), 2000); // Hide after 2s
+                  }}
+                >
+                  Add to Cart
+                </button>
+                {addedProductId === product.id && (
+                  <div className="alert alert-success mt-2 p-2 text-center">
+                    ✅ Added to cart!
+                  </div>
+                )}
               </div>
             </div>
           </div>

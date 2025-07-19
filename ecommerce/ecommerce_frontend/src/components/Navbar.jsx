@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
+import { useCart } from '../pages/CartContext';
 
 import { FaUser, FaShoppingCart, FaPhoneAlt, FaPhone } from "react-icons/fa";
 
 const Navbar = () => {
+    const { cartItems } = useCart();
+    const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light px-3 py-4 border-bottom">
       <div className="container-fluid">
@@ -65,11 +69,11 @@ const Navbar = () => {
 
             {/* Cart */}
             <li className="nav-item position-relative">
-              <a className="nav-link d-flex align-items-center fs-5" href="#">
+              <Link to='/cart' className="nav-link d-flex align-items-center fs-5" >
                 <FaShoppingCart className="me-1" />
                 <span>Cart</span>
-                <span className="badge bg-danger ms-1">0</span>
-              </a>
+                <span className="badge bg-danger ms-1">{totalItems}</span>
+              </Link>
             </li>
           </ul>
         </div>
