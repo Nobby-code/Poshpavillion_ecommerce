@@ -72,7 +72,7 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ['id', 'user', 'created_at', 'status', 'full_name', 'phone_number',
-                  'address', 'city','postal_code','country','items', 'total_price']
+                  'address', 'city','postal_code','country','items', 'total_price', 'email']
         read_only_fields = ['user', 'created_at', 'status', 'items']
     
     def get_total_price(self, obj):
@@ -81,5 +81,10 @@ class OrderSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         '''Override create method to set the user automatically'''
         request = self.context.get('request')
-        validated_data['user'] = request.user  # Automatically set the logged-in user
+        # validated_data['user'] = request.user  # Automatically set the logged-in user
+        user = request.user
+        if user and user.is_authenticated:
+            validated_data['user'] = user
+        else:
+            validated_data['user'] = None  # Allow anonymous order
         return super().create(validated_data)

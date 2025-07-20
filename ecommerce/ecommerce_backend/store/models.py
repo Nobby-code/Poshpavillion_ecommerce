@@ -52,7 +52,7 @@ class Order(models.Model):
         ('cancelled', 'Cancelled'),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
 
@@ -63,9 +63,14 @@ class Order(models.Model):
     city = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=20, blank=True)
     country = models.CharField(max_length=100, default='Kenya')
+    email = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"===Order {self.id} by {self.user.username}==="
+        # return f"===Order {self.id} by {self.user.username}==="
+        if self.user:
+            return f"=== Order {self.id} by {self.user.username} ==="
+        return f"=== Order {self.id} by Guest ==="
+
     
     def get_total_price(self):
         '''To get total price of  the order'''

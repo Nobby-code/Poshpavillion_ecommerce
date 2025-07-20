@@ -61,8 +61,8 @@ class CartItemViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     '''Order functionality'''
     serializer_class = OrderSerializer
-    # permission_classes = [IsAuthenticated]
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [AllowAny]  # Allow all users to view orders
+    # permission_classes = [IsAuthenticatedOrReadOnly]
 
 
     def get_queryset(self):
@@ -81,10 +81,15 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         if cart.items.count() == 0:
             return Response({'error': 'Cart is empty'}, status=400)
+        
+        # ✅ Only assign user if authenticated
+        user = request.user if request.user.is_authenticated else None
 
         # Create the order
         order = Order.objects.create(
-            user=request.user,
+            # user=request.user,
+            user=user,
+            # cart=cart,
             # cart=cart,
             full_name=request.data['full_name'],
             phone_number=request.data['phone_number'],
