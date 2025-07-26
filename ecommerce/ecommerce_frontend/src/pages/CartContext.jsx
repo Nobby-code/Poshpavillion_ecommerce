@@ -38,8 +38,32 @@ export const CartProvider = ({ children }) => {
     setCartItems((prev) => prev.filter((item) => item.id !== productId));
   };
 
+  const clearCart = () => setCartItems([]);
+
+  // Additional functions to increase quantity
+  // This is useful for the cart page to allow users to adjust quantities directly
+const increaseQty = (productId) => {
+    setCartItems(prev =>
+      prev.map(item =>
+        item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
+  };
+
+  // Additional functions to decrease quantity
+  // This is useful for the cart page to allow users to adjust quantities directly
+  const decreaseQty = (productId) => {
+    setCartItems(prev =>
+      prev.map(item =>
+        item.id === productId
+          ? { ...item, quantity: Math.max(1, item.quantity - 1) }
+          : item
+      )
+    );
+  };
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, increaseQty, decreaseQty, clearCart }}>
       {children}
     </CartContext.Provider>
   );

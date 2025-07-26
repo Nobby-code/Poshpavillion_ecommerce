@@ -1,18 +1,30 @@
-import { Link } from "react-router-dom";
-import { useCart } from '../pages/CartContext';
+import { Link, useNavigate } from "react-router-dom";
+import { useCart } from "../pages/CartContext";
+import { useState } from "react";
 
-import { FaUser, FaShoppingCart, FaPhoneAlt, FaPhone } from "react-icons/fa";
+import { FaUser, FaShoppingCart, FaPhoneAlt } from "react-icons/fa";
 
 const Navbar = () => {
-    const { cartItems } = useCart();
-    const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const { cartItems } = useCart();
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+
+  // Function to handle search
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (query.trim() !== "") {
+      navigate(`/search?query=${encodeURIComponent(query)}`);
+    }
+  };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light px-3 py-4 border-bottom">
       <div className="container-fluid">
         {/* Branding */}
         <a className="navbar-brand fw-bold text-dark fs-2" href="/">
-          Poshpavillion Fashion Store
+          Posh pavillion Fashion
         </a>
 
         {/* Mobile toggle */}
@@ -28,12 +40,14 @@ const Navbar = () => {
         {/* Navbar content */}
         <div className="collapse navbar-collapse" id="navbarContent">
           {/* Search Bar */}
-          <form className="d-flex mx-auto w-50">
+          <form className="d-flex mx-auto w-50" onSubmit={handleSearch}>
             <input
               className="form-control me-2 py-3 fs-4 bg-light"
               type="search"
               placeholder="Search products…"
               aria-label="Search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
             />
             <button
               className="btn btn-outline-primary fw-bold bg-primary text-white px-5 fs-5"
@@ -62,14 +76,20 @@ const Navbar = () => {
 
             {/* My Account */}
             <li className="nav-item">
-              <a className="nav-link d-flex align-items-centerv fs-5 px-4" href="#">
+              <a
+                className="nav-link d-flex align-items-centerv fs-5 px-4"
+                href="#"
+              >
                 <FaUser className="me-1" /> Log In
               </a>
             </li>
 
             {/* Cart */}
             <li className="nav-item position-relative">
-              <Link to='/cart' className="nav-link d-flex align-items-center fs-5" >
+              <Link
+                to="/cart"
+                className="nav-link d-flex align-items-center fs-5"
+              >
                 <FaShoppingCart className="me-1" />
                 <span>Cart</span>
                 <span className="badge bg-danger ms-1">{totalItems}</span>

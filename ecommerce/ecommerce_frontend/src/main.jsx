@@ -7,6 +7,7 @@ import App from "./App.jsx";
 import { CartProvider } from "./pages/CartContext.jsx";
 import { ToastProvider } from "./components/ToastContext.jsx";
 // import { ToastProvider } from './components/ToastContext';
+// import './bootstrap.min.css'; // Ensure Bootstrap styles are applied
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>

@@ -29,7 +29,8 @@ class ProductViewSet(viewsets.ModelViewSet):
     filter_backends = [filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter]
     filterset_class = ProductFilter
     permission_classes = [IsAdminOrReadOnly]
-    search_fields = ['name', 'description']
+    filterset_fields = ['category']  # for filtering
+    search_fields = ['name', 'description', 'category__name']  # for search
     ordering_fields = ['price', 'created_at', 'stock']
 
 class CartViewSet(viewsets.ModelViewSet):

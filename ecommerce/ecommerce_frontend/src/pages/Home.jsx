@@ -19,12 +19,12 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="container px-0">
-      <h2 className="text-start ps-2">Products</h2>
+    <div className="container px-0 my-5">
+      <h2 className="text-start ps-2 mb-4 fw-bold text-dark">Latest Products</h2>
       <div className="row">
         {products.map((product) => (
           <div key={product.id} className="col-md-4 mb-4">
-            <div className="card h-100">
+            <div className="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
               {/* {product.image && (
                 <img
                   //   src={product.image}
@@ -36,15 +36,20 @@ const Home = () => {
               <img
                 src={product.image}
                 alt={product.name}
-                className="card-img-top"
-                style={{ objectFit: "cover", height: "300px" }}
+                className="card-img-top rounded-top-4"
+                style={{
+                  objectFit: "cover",
+                  height: "250px",
+                  borderTopLeftRadius: "1rem",
+                  borderTopRightRadius: "1rem",
+                }}
               />
-              <div className="card-body text-start">
-                <h5 className="card-title">{product.name}</h5>
-                <h3 className="card-text">{product.description}</h3>
+              <div className="card-body text-start px-3 py-4">
+                <h5 className="card-title fw-semibold mb-1">{product.name}</h5>
+                <h3 className="card-text text-muted small mb-2">{product.description}</h3>
                 {/* <h3 className="card-text">{product.stock}</h3> */}
-                <p className="card-text">KES {product.price}</p>
-                <p className="card-text">
+                <p className="card-text fw-bold text-primary mb-1 card-price">KES {product.price}</p>
+                <p className="card-text mb-3">
                   <small
                     className={
                       product.stock > 0 ? "text-success" : "text-danger"
@@ -56,7 +61,7 @@ const Home = () => {
                   </small>
                 </p>
                 <button
-                  className="btn btn-primary py-3 w-100"
+                  className="btn btn-outline-primary fw-semibold py-3 w-100 card-btn-custom"
                   onClick={() => {
                     addToCart(product);
                     showToast(`${product.name} added to cart!`); // Show success toast message
