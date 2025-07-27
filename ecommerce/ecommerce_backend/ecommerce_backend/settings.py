@@ -32,7 +32,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     '07f9-2c0f-fe38-2192-762e-a186-423f-7f43-1914.ngrok-free.app', # ngrok url for testing
-    'https://poshpavillion-ecommerce.onrender.com',
+    'https://poshpavillion.onrender.com',
 ]
 
 
