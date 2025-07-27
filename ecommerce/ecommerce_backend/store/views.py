@@ -15,6 +15,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .mpesa import lipa_na_mpesa
 
+from django.core.management import call_command
+from django.http import HttpResponse
+
 
 # Create your views here.
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -163,3 +166,7 @@ def mpesa_callback(request):
         print("❌ Error parsing callback:", e)
 
     return Response({"ResultCode": 0, "ResultDesc": "Accepted"})
+
+def trigger_admin_create(request):
+    call_command('create_admin')
+    return HttpResponse("Superuser created (if it didn't already exist). You can now log in at /admin/")
