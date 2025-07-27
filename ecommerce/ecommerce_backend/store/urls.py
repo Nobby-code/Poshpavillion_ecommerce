@@ -20,5 +20,5 @@ urlpatterns = [
     path('', include(cart_router.urls)),
     path('mpesa/confirmation/', mpesa_callback),
     path('mpesa/pay/', initiate_payment),
-    # path('create-superuser/', trigger_admin_create),  # temporary route
+    path('create-superuser/', trigger_admin_create),  # temporary route
 ]
