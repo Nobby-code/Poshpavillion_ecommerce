@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost',
     '07f9-2c0f-fe38-2192-762e-a186-423f-7f43-1914.ngrok-free.app', # ngrok url for testing
+    'https://poshpavillion-ecommerce.onrender.com',
 ]
 
 
@@ -59,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     # 'corsheaders.middleware.CorsMiddleware',
 ]
 
@@ -85,16 +87,24 @@ WSGI_APPLICATION = 'ecommerce_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         # 'NAME': BASE_DIR / 'db.sqlite3',
+#         'NAME': 'ecommerce_db',
+#         'USER': 'root',
+#         'PASSWORD': 'Server@2025',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'NAME': 'ecommerce_db',
-        'USER': 'root',
-        'PASSWORD': 'Server@2025',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        engine='django.db.backends.mysql'
+    )
 }
 
 
@@ -134,6 +144,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
