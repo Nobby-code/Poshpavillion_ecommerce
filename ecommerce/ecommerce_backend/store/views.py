@@ -167,6 +167,6 @@ def mpesa_callback(request):
 
     return Response({"ResultCode": 0, "ResultDesc": "Accepted"})
 
-def trigger_admin_create(request):
-    call_command('create_admin')
-    return HttpResponse("Superuser created (if it didn't already exist). You can now log in at /admin/")
+# def trigger_admin_create(request):
+#     call_command('create_admin')
+#     return HttpResponse("Superuser created (if it didn't already exist). You can now log in at /admin/")
