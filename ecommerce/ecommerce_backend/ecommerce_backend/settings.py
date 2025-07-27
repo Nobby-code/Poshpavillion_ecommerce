@@ -29,10 +29,11 @@ SECRET_KEY = 'django-insecure-at2*9p))@p68@**y_2-+vlo#0gfr%3ney1v_rrnyu&i!)+i2h!
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    'poshpavillion.onrender.com',
     '127.0.0.1',
     'localhost',
     '07f9-2c0f-fe38-2192-762e-a186-423f-7f43-1914.ngrok-free.app', # ngrok url for testing
-    'https://poshpavillion.onrender.com',
+    
 ]
 
 
