@@ -10,6 +10,9 @@ from rest_framework.response import Response
 from rest_framework import status  
 from .permissions import IsAdminOrReadOnly
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.views import APIView
+
+from django.contrib.auth import get_user_model
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -167,6 +170,33 @@ def mpesa_callback(request):
 
     return Response({"ResultCode": 0, "ResultDesc": "Accepted"})
 
-def trigger_admin_create(request):
-    call_command('create_admin')
-    return HttpResponse("Superuser created (if it didn't already exist). You can now log in at /admin/")
+# def trigger_admin_create(request):
+#     call_command('create_admin')
+#     return HttpResponse("Superuser created (if it didn't already exist). You can now log in at /admin/")
+# class CreateAdminView(APIView):
+#     def get(self, request):
+#         try:
+#             call_command('create_admin')
+#             return Response({"message": "Superuser created or already exists."})
+#         except Exception as e:
+#             return Response({"error": str(e)}, status=500)
+        
+# class CreateAdminView(APIView):
+#     def get(self, request):
+#         call_command('create_admin')
+#         return Response({'message': 'Superuser created or already exists.'})
+class CreateAdminView(APIView):
+    def get(self, request):
+        User = get_user_model()
+        username = 'nobby'  # Change as needed
+
+        # Check if superuser with that username exists
+        if not User.objects.filter(username=username, is_superuser=True).exists():
+            User.objects.create_superuser(
+                username=username,
+                email='nobby@example.com',
+                password='nobby1234'
+            )
+            return Response({'message': f'Superuser "{username}" created.'}, status=status.HTTP_201_CREATED)
+
+        return Response({'message': f'Superuser "{username}" already exists.'}, status=status.HTTP_200_OK)
