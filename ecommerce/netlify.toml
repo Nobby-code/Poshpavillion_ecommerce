@@ -1,4 +1,4 @@
 [build]
-  base = "ecommerce_frontend"
+  base = "ecommerce/ecommerce_frontend"
   publish = "dist"
   command = "npm run build"
