@@ -191,9 +191,9 @@ MPESA_CALLBACK_URL = 'https://07f9-2c0f-fe38-2192-762e-a186-423f-7f43-1914.ngrok
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For dev
 
-# CORS_ALLOW_ALL_ORIGINS = True  # (for testing only!)
+CORS_ALLOW_ALL_ORIGINS = True  # (for testing only!)
 
-CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = [
-    "https://poshpavillion.netlify.app",
-]
+# CORS_ALLOW_ALL_ORIGINS = False
+# CORS_ALLOWED_ORIGINS = [
+#     "https://poshpavillion.netlify.app",
+# ]
