@@ -10,7 +10,8 @@ from rest_framework.response import Response
 from rest_framework import status  
 from .permissions import IsAdminOrReadOnly
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.views import APIView
+from rest_framework.views import APIView, View
+from django.http import JsonResponse
 
 from django.contrib.auth import get_user_model
 
@@ -200,3 +201,12 @@ class CreateAdminView(APIView):
             return Response({'message': f'Superuser "{username}" created.'}, status=status.HTTP_201_CREATED)
 
         return Response({'message': f'Superuser "{username}" already exists.'}, status=status.HTTP_200_OK)
+    
+# class RunMigrationView(APIView): to
+class RunMigrationView(View):
+    def get(self, request):
+        try:
+            call_command('migrate')
+            return JsonResponse({'status': 'Migration applied successfully.'})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)

@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_nested.routers import NestedDefaultRouter
 from .views import CategoryViewSet, ProductViewSet, CartViewSet, CartItemViewSet, OrderViewSet, mpesa_callback, initiate_payment
 
-from .views import CreateAdminView
+from .views import CreateAdminView, RunMigrationView
 
 print("Loaded CreateAdminView:", CreateAdminView)
 
@@ -22,6 +22,7 @@ router.register('orders', OrderViewSet, basename='order')
 
 urlpatterns = [
     path('create-superuser/', CreateAdminView.as_view(), name='create-superuser'),
+    path('run-migration/', RunMigrationView.as_view(), name='run-migration'),
     path('', include(router.urls)),
     path('', include(cart_router.urls)),
     path('mpesa/confirmation/', mpesa_callback),
