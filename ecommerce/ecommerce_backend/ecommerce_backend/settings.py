@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 # import dj_database_url
 import os
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -50,6 +53,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'store',
     'django_filters',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -179,8 +184,35 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,  # default page
 }
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+
+
+# Cloudinary settings
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': 'dxwc7cm3b',
+#     'API_KEY': '112191633412928',
+#     'API_SECRET': 'upVijEUD0Lc0I3J4OMuzHWH9G7w'
+# }
+
+cloudinary.config( 
+  cloud_name = "dxwc7cm3b", 
+  api_key = "112191633412928", 
+  api_secret = "upVijEUD0Lc0I3J4OMuzHWH9G7w" 
+)
+
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': os.environ.get('dxwc7cm3b'),
+#     'API_KEY': os.environ.get('112191633412928'),
+#     'API_SECRET': os.environ.get('upVijEUD0Lc0I3J4OMuzHWH9G7w')
+# }
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# MEDIA_URL = 'https://res.cloudinary.com/dxwc7cm3b/'
+
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = BASE_DIR / 'media'
+#production media root
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MPESA_CONSUMER_KEY = ' uRcZmZtlCSPVXo4heoSeu6nCjwRF25AIr2bHrdMarJU06uqd'
 MPESA_CONSUMER_SECRET = 'Wj9cIXpjAqAznGRyCoAD2G1YWPVhuZbIvGRJdyfJcsjiUtyLFSDoaHgGAnsDnYa8'

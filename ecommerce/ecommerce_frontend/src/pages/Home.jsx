@@ -34,7 +34,8 @@ const Home = () => {
                 />
               )} */}
               <img
-                src={product.image}
+                // src={product.image}
+                src={`https://res.cloudinary.com/dxwc7cm3b/${product.image}`}
                 alt={product.name}
                 className="card-img-top rounded-top-4"
                 style={{

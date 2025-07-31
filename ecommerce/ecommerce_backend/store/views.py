@@ -204,9 +204,10 @@ class CreateAdminView(APIView):
     
 # class RunMigrationView(APIView): to
 class RunMigrationView(View):
-    def get(self, request):
-        try:
-            call_command('migrate')
-            return JsonResponse({'status': 'Migration applied successfully.'})
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
+    # def get(self, request):
+    #     try:
+    #         call_command('migrate')
+    #         return JsonResponse({'status': 'Migration applied successfully.'})
+    #     except Exception as e:
+    #         return JsonResponse({'error': str(e)}, status=500)
+    print("Hellooo")
