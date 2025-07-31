@@ -6,7 +6,8 @@ const ProductsByCategory = () => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/api/products/?category=${categoryName}`)
+    // fetch(`http://127.0.0.1:8000/api/products/?category=${categoryName}`)
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/products/?category=${categoryName}`)
       .then(res => res.json())
       .then(data => setProducts(data.results))
       .catch(err => console.error("Error fetching products:", err));
