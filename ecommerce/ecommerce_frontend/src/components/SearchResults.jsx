@@ -17,7 +17,7 @@ const SearchResults = () => {
   //       } catch (err) {
   //         console.error(err);
   //       }
-  //     };
+  //     }; ${import.meta.env.VITE_API_BASE_URL}/products/
   //     if (searchQuery) fetchResults();
   //   }, [searchQuery]);
 
@@ -25,7 +25,8 @@ const SearchResults = () => {
     console.log("searchQuery:", searchQuery);
     if (searchQuery) {
       axios
-        .get(`/api/products/?search=${searchQuery}`)
+        // .get(`/api/products/?search=${searchQuery}`)
+        .get(`${import.meta.env.VITE_API_BASE_URL}/products/?search=${searchQuery}`)
         .then((res) => {
           console.log("Full response from backend:", res.data);
           setProducts(res.data.results);
