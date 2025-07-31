@@ -5,7 +5,9 @@ function CategoryList() {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/api/categories/")
+    // fetch("http://127.0.0.1:8000/api/categories/")
+    // fetch(`${import.meta.env.VITE_API_BASE_URL}/categories/`)
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/categories/`)
       .then((res) => res.json())
       .then((data) => {
         console.log("Fetched categories successfully:", data);
