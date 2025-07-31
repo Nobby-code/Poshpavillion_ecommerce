@@ -26,7 +26,9 @@ const SearchResults = () => {
     if (searchQuery) {
       axios
         // .get(`/api/products/?search=${searchQuery}`)
-        .get(`${import.meta.env.VITE_API_BASE_URL}/products/?search=${searchQuery}`)
+        .get(
+          `${import.meta.env.VITE_API_BASE_URL}/products/?search=${searchQuery}`
+        )
         .then((res) => {
           console.log("Full response from backend:", res.data);
           setProducts(res.data.results);
@@ -68,7 +70,8 @@ const SearchResults = () => {
               {/* <ProductCard product={product} /> */}
               <div className="card h-100">
                 <img
-                  src={product.image}
+                  //   src={product.image}
+                  src={`https://res.cloudinary.com/dxwc7cm3b/${product.image}`}
                   className="card-img-top"
                   alt={product.name}
                 />
@@ -77,16 +80,16 @@ const SearchResults = () => {
                   <h3 className="card-text">{product.description}</h3>
                   <p className="card-text">Ksh {product.price}</p>
                   <p className="card-text">
-                  <small
-                    className={
-                      product.stock > 0 ? "text-success" : "text-danger"
-                    }
-                  >
-                    {product.stock > 0
-                      ? `${product.stock} in stock`
-                      : "Out of stock"}
-                  </small>
-                </p>
+                    <small
+                      className={
+                        product.stock > 0 ? "text-success" : "text-danger"
+                      }
+                    >
+                      {product.stock > 0
+                        ? `${product.stock} in stock`
+                        : "Out of stock"}
+                    </small>
+                  </p>
                 </div>
               </div>
             </div>
