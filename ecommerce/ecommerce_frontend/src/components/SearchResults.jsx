@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import ProductSkeletonCard from "./ProductSkeletonCard";
+
 const SearchResults = () => {
   const [products, setProducts] = useState([]);
   const location = useLocation();
@@ -9,6 +13,7 @@ const SearchResults = () => {
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get("query");
 
+  const [loading, setLoading] = useState(false);
   //   useEffect(() => {
   //     const fetchResults = async () => {
   //       try {
@@ -24,6 +29,7 @@ const SearchResults = () => {
   useEffect(() => {
     console.log("searchQuery:", searchQuery);
     if (searchQuery) {
+      setLoading(true); // start loading
       axios
         // .get(`/api/products/?search=${searchQuery}`)
         .get(
@@ -32,10 +38,14 @@ const SearchResults = () => {
         .then((res) => {
           console.log("Full response from backend:", res.data);
           setProducts(res.data.results);
+          setLoading(false); // stop loading
           // setProducts(res.data);
           console.log(res.data.results);
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          console.error(err);
+          setLoading(false); // stop loading on error
+        });
     }
   }, [searchQuery]);
 
@@ -63,7 +73,23 @@ const SearchResults = () => {
           ))
         )}
       </div> */}
-      {Array.isArray(products) && products.length > 0 ? (
+      {loading ? (
+        // <div className="d-flex justify-content-center align-items-center my-5">
+        //   <TailSpin height="80" width="80" color="#0d6efd" />
+        // </div>
+        // <div
+        //   className="text-center w-200 py-10">
+        //   <div className="spinner-border text-primary" role="status">
+        //     <span className="visually-hidden">Loading...</span>
+        //   </div>
+        //   <h5 className="mt-2">Loading, please wait...</h5>
+        // </div>
+        <div className="d-flex flex-wrap justify-content-start">
+          {[...Array(6)].map((_, i) => (
+            <ProductSkeletonCard key={i} />
+          ))}
+        </div>
+      ) : Array.isArray(products) && products.length > 0 ? (
         <div className="row">
           {products.map((product) => (
             <div key={product.id} className="col-md-4 mb-4">
