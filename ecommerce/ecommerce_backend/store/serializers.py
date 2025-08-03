@@ -6,7 +6,7 @@ class CategorySerializer(serializers.ModelSerializer):
         # model = Category
         # fields = '__all__'
         model = Category
-        fields = ['id', 'name', 'description']
+        fields = ['id', 'name','slug', 'description']
 
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)  # For GET (readable nested object)
