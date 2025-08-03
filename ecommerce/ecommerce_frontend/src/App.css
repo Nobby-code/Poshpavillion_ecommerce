@@ -268,3 +268,15 @@ main {
   justify-content: center;
   min-height: 100vh;     */
 }
+
+.dropdown-menu {
+  display: none;
+}
+
+.dropdown-menu.show {
+  display: block;
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+

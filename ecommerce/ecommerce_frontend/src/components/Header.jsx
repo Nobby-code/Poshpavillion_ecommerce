@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
 
 const Header = () => {
   const [categories, setCategories] = useState([]);
+
+  const [activeDropdown, setActiveDropdown] = useState(null);
+  const toggleDropdown = (dropdownName) => {
+    setActiveDropdown((prev) => (prev === dropdownName ? null : dropdownName));
+  };
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_BASE_URL}/categories/`)
@@ -17,7 +22,9 @@ const Header = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
       <div className="container-fluid">
-        <Link className="navbar-brand fw-bold" to="/">MyShop</Link>
+        <Link className="navbar-brand fw-bold" to="/">
+          Posh Pavillion Fashions
+        </Link>
 
         <button
           className="navbar-toggler"
@@ -33,36 +40,122 @@ const Header = () => {
 
         <div className="collapse navbar-collapse" id="navbarMain">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-
             {/* PRODUCTS: Static Mega Dropdown */}
             <li className="nav-item dropdown dropdown-hover">
-              <button
+              {/* <button
                 className="nav-link dropdown-toggle nav-link-custom btn btn-link"
                 data-bs-toggle="dropdown"
               >
                 Products
+              </button> */}
+              <button
+                className="nav-link dropdown-toggle nav-link-custom btn btn-link"
+                onClick={() => toggleDropdown("products")}
+              >
+                Products
               </button>
+              {activeDropdown === "products" && (
+                <div className="dropdown-menu mega-dropdown p-4 shadow border show">
+                  <div className="row">
+                    <div className="col-md-4">
+                      <h6>Men</h6>
+                      <Link className="dropdown-item" to="/category/men/shirts">
+                        Shirts
+                      </Link>
+                      <Link className="dropdown-item" to="/category/men/shoes">
+                        Shoes
+                      </Link>
+                      <Link
+                        className="dropdown-item"
+                        to="/category/men/accessories"
+                      >
+                        Accessories
+                      </Link>
+                    </div>
+                    <div className="col-md-4">
+                      <h6>Women</h6>
+                      <Link
+                        className="dropdown-item"
+                        to="/category/women/dresses"
+                      >
+                        Dresses
+                      </Link>
+                      <Link
+                        className="dropdown-item"
+                        to="/category/women/shoes"
+                      >
+                        Shoes
+                      </Link>
+                      <Link className="dropdown-item" to="/category/women/bags">
+                        Bags
+                      </Link>
+                    </div>
+                    <div className="col-md-4">
+                      <h6>Collections</h6>
+                      <Link
+                        className="dropdown-item"
+                        to="/category/new-arrivals"
+                      >
+                        New Arrivals
+                      </Link>
+                      <Link
+                        className="dropdown-item"
+                        to="/category/best-sellers"
+                      >
+                        Best Sellers
+                      </Link>
+                      <Link className="dropdown-item" to="/category/sale">
+                        Sale
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              )}
               <div className="dropdown-menu mega-dropdown p-4 shadow border">
-                <div className="row">
+                {/* <div className="row">
                   <div className="col-md-4">
                     <h6>Men</h6>
-                    <Link className="dropdown-item" to="/category/men/shirts">Shirts</Link>
-                    <Link className="dropdown-item" to="/category/men/shoes">Shoes</Link>
-                    <Link className="dropdown-item" to="/category/men/accessories">Accessories</Link>
+                    <Link className="dropdown-item" to="/category/men/shirts">
+                      Shirts
+                    </Link>
+                    <Link className="dropdown-item" to="/category/men/shoes">
+                      Shoes
+                    </Link>
+                    <Link
+                      className="dropdown-item"
+                      to="/category/men/accessories"
+                    >
+                      Accessories
+                    </Link>
                   </div>
                   <div className="col-md-4">
                     <h6>Women</h6>
-                    <Link className="dropdown-item" to="/category/women/dresses">Dresses</Link>
-                    <Link className="dropdown-item" to="/category/women/shoes">Shoes</Link>
-                    <Link className="dropdown-item" to="/category/women/bags">Bags</Link>
+                    <Link
+                      className="dropdown-item"
+                      to="/category/women/dresses"
+                    >
+                      Dresses
+                    </Link>
+                    <Link className="dropdown-item" to="/category/women/shoes">
+                      Shoes
+                    </Link>
+                    <Link className="dropdown-item" to="/category/women/bags">
+                      Bags
+                    </Link>
                   </div>
                   <div className="col-md-4">
                     <h6>Collections</h6>
-                    <Link className="dropdown-item" to="/category/new-arrivals">New Arrivals</Link>
-                    <Link className="dropdown-item" to="/category/best-sellers">Best Sellers</Link>
-                    <Link className="dropdown-item" to="/category/sale">Sale</Link>
+                    <Link className="dropdown-item" to="/category/new-arrivals">
+                      New Arrivals
+                    </Link>
+                    <Link className="dropdown-item" to="/category/best-sellers">
+                      Best Sellers
+                    </Link>
+                    <Link className="dropdown-item" to="/category/sale">
+                      Sale
+                    </Link>
                   </div>
-                </div>
+                </div> */}
               </div>
             </li>
 
@@ -75,6 +168,7 @@ const Header = () => {
                 >
                   Categories
                 </button>
+                {/* {activeDropdown === "categories" && ()} */}
                 <div className="dropdown-menu mega-dropdown px-4 py-4 shadow border">
                   <div className="row">
                     {categories.map((category) => (
@@ -98,7 +192,9 @@ const Header = () => {
             )}
 
             <li className="nav-item">
-              <Link className="nav-link nav-link-custom" to="/login">Top Deals</Link>
+              <Link className="nav-link nav-link-custom" to="/login">
+                Top Deals
+              </Link>
             </li>
           </ul>
 
