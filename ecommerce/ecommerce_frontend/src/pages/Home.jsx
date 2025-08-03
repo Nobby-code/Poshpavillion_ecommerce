@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useCart } from "./CartContext";
 // import { useToast } from '../components/ToastContext';
 import { useToast } from "../components/ToastContext"; // ✅ Import useToast hook
 // import { useCart } from "./CartContext";
 
+import { ProductContext } from '../context/ProductContext';
+
 const Home = () => {
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
+  const { products, setProducts } = useContext(ProductContext); // Using shared state
   const { addToCart } = useCart();
   const [addedProductId, setAddedProductId] = useState(null); // track recently added product
   const { showToast } = useToast(); // ✅ Get showToast function
@@ -20,7 +23,7 @@ const Home = () => {
       })
       .catch((err) => console.error("Error fetching products:", err))
       .finally(() => setLoading(false)); // Set loading to false after fetching
-  }, []);
+  }, [products, setProducts]);
 
   return (
     <div className="container px-0 my-5">
