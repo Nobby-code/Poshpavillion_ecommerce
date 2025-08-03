@@ -19,6 +19,7 @@ import ProductList from "./components/ProductList";
 import SearchResults from "./components/SearchResults";
 import ProductsByCategory from "./pages/ProductsByCategory";
 import { FaWhatsapp } from "react-icons/fa";
+import CategoryPage from './pages/CategoryPage';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -56,6 +57,7 @@ function App() {
               path="/products/:categoryName"
               element={<ProductsByCategory />}
             />
+             <Route path="/category/:slug" element={<CategoryPage />} />
           </Routes>
         </div>
       </main>

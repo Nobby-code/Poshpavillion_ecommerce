@@ -1,94 +1,65 @@
 import { useEffect, useState, useContext } from "react";
 import { useCart } from "./CartContext";
-// import { useToast } from '../components/ToastContext';
-import { useToast } from "../components/ToastContext"; // ✅ Import useToast hook
-// import { useCart } from "./CartContext";
-
-import { ProductContext } from '../context/ProductContext';
+import { useToast } from "../components/ToastContext";
+import { ProductContext } from "../context/ProductContext";
 
 const Home = () => {
-  // const [products, setProducts] = useState([]);
-  const { products, setProducts } = useContext(ProductContext); // Using shared state
+  const { products, setProducts } = useContext(ProductContext);
   const { addToCart } = useCart();
-  const [addedProductId, setAddedProductId] = useState(null); // track recently added product
-  const { showToast } = useToast(); // ✅ Get showToast function
+  const { showToast } = useToast();
 
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_BASE_URL}/products/`)
       .then((res) => res.json())
       .then((data) => {
-        console.log("Fetched successsully:", data);
+        console.log("Fetched successfully:", data);
         setProducts(data.results);
       })
       .catch((err) => console.error("Error fetching products:", err))
-      .finally(() => setLoading(false)); // Set loading to false after fetching
-  }, [products, setProducts]);
+      .finally(() => setLoading(false));
+  }, [setProducts]);
 
   return (
-    <div className="container px-0 my-5">
-      <h2 className="text-start ps-2 mb-4 fw-bold text-dark">
-        Latest Products
-      </h2>
+    <div className="container my-5">
+      <h2 className="mb-4 fw-bold text-dark">Latest Products</h2>
+
       {loading ? (
         <div
-          className="text-center w-200 py-10"
+          className="d-flex flex-column align-items-center justify-content-center"
           style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            zIndex: 9999,
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            height: "50vh",
+            position: "relative",
+            zIndex: 1000,
           }}
         >
-          <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
-          </div>
-          <h5 className="mt-2">Loading, please wait...</h5>
+          <div className="spinner-border text-primary" role="status" />
+          <p className="mt-3 text-muted">Loading products...</p>
         </div>
       ) : (
-        // <div className="row">
         <div className="row">
           {products.map((product) => (
-            <div key={product.id} className="col-md-4 mb-4">
+            <div key={product.id} className="col-sm-6 col-md-4 col-lg-3 mb-4">
               <div className="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
-                {/* {product.image && (
                 <img
-                  //   src={product.image}
-                  src={`http://127.0.0.1:8000${product.image}`}
-                  className="card-img-top"
-                  alt={product.name}
-                />
-              )} */}
-                <img
-                  // src={product.image}
                   src={`https://res.cloudinary.com/dxwc7cm3b/${product.image}`}
-                  alt={product.name}
-                  className="card-img-top rounded-top-4"
+                  alt={product.name || "Product Image"}
+                  className="card-img-top"
                   style={{
                     objectFit: "cover",
                     height: "250px",
-                    borderTopLeftRadius: "1rem",
-                    borderTopRightRadius: "1rem",
                   }}
                 />
-                <div className="card-body text-start px-3 py-4">
-                  <h5 className="card-title fw-semibold mb-1">
-                    {product.name}
-                  </h5>
-                  <h3 className="card-text text-muted small mb-2">
-                    {product.description}
-                  </h3>
-                  {/* <h3 className="card-text">{product.stock}</h3> */}
-                  <p className="card-text fw-bold text-primary mb-1 card-price">
+                <div className="card-body px-3 py-4 text-start">
+                  <h5 className="card-title fw-semibold mb-1">{product.name}</h5>
+                  <p className="card-text text-muted small mb-2">{product.description}</p>
+                  <p className="card-text fw-bold text-primary mb-1">
                     KES {product.price}
                   </p>
                   <p className="card-text mb-3">
                     <small
-                      className={
-                        product.stock > 0 ? "text-success" : "text-danger"
-                      }
+                      className={product.stock > 0 ? "text-success" : "text-danger"}
                     >
                       {product.stock > 0
                         ? `${product.stock} in stock`
@@ -96,20 +67,15 @@ const Home = () => {
                     </small>
                   </p>
                   <button
-                    className="btn btn-outline-primary fw-semibold py-3 w-100 card-btn-custom"
+                    className="btn btn-outline-primary fw-semibold py-2 w-100"
                     onClick={() => {
                       addToCart(product);
-                      showToast(`${product.name} added to cart!`); // Show success toast message
-                      // setTimeout(() => setAddedProductId(null), 2000); // Hide after 2s
+                      showToast(`${product.name} added to cart!`);
                     }}
+                    disabled={product.stock <= 0}
                   >
-                    Add to Cart
+                    {product.stock > 0 ? "Add to Cart" : "Out of Stock"}
                   </button>
-                  {addedProductId === product.id && (
-                    <div className="alert alert-success mt-2 p-2 text-center">
-                      ✅ Added to cart!
-                    </div>
-                  )}
                 </div>
               </div>
             </div>

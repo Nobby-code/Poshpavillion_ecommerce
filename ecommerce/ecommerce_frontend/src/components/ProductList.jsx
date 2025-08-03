@@ -3,10 +3,9 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
 const ProductList = () => {
-  const { categorySlug } = useParams();  // get category from URL
+  const { categorySlug } = useParams();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
 
@@ -30,31 +29,51 @@ const ProductList = () => {
   };
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="Search by name"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+    <div className="container my-4">
+      {/* Filters */}
+      <div className="row mb-4 align-items-center">
+        <div className="col-md-6 mb-2">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Search products..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
 
-      <select
-        value={selectedCategory}
-        onChange={(e) => setSelectedCategory(e.target.value)}
-      >
-        <option value="">All Categories</option>
-        {categories.map(cat => (
-          <option key={cat.id} value={cat.id}>{cat.name}</option>
-        ))}
-      </select>
+        <div className="col-md-6 mb-2">
+          <select
+            className="form-select"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="">All Categories</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
 
-      <div className="product-list">
-        {products.map(product => (
-          <div key={product.id}>
-            <h4>{product.name}</h4>
-            <p>Category: {product.category.name}</p>
-          </div>
-        ))}
+      {/* Products Grid */}
+      <div className="row">
+        {products.length > 0 ? (
+          products.map((product) => (
+            <div className="col-sm-6 col-md-4 col-lg-3 mb-4" key={product.id}>
+              <div className="card h-100 shadow-sm">
+                <div className="card-body d-flex flex-column justify-content-between">
+                  <h5 className="card-title">{product.name}</h5>
+                  <p className="card-text text-muted">Category: {product.category.name}</p>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-center">No products found.</p>
+        )}
       </div>
     </div>
   );

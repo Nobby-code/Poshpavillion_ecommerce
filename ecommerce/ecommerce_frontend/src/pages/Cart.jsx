@@ -1,7 +1,3 @@
-// export default function Cart() {
-//   return <h2>Cart Page</h2>;
-// }
-
 import React from "react";
 import { Link } from 'react-router-dom';
 import { useCart } from "./CartContext";
@@ -9,7 +5,7 @@ import { useToast } from "../components/ToastContext";
 
 const Cart = () => {
   const { cartItems, removeFromCart, increaseQty, decreaseQty } = useCart();
-  const { showToast } = useToast(); // ✅ Get showToast function
+  const { showToast } = useToast();
 
   const getTotal = () =>
     cartItems.reduce(
@@ -23,11 +19,11 @@ const Cart = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <h3 className="fw-bold mb-4">🛒 My Cart</h3>
+    <div className="container my-4">
+      <h3 className="fw-bold mb-4 text-center">🛒 My Cart</h3>
 
       {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
+        <p className="text-center">Your cart is empty.</p>
       ) : (
         <div className="table-responsive">
           <table className="table table-bordered align-middle">
@@ -43,19 +39,18 @@ const Cart = () => {
             <tbody>
               {cartItems.map((item) => (
                 <tr key={item.id}>
-                  <td>{item.name}</td>
+                  <td className="text-nowrap">{item.name}</td>
                   <td>
-                    {/* {item.quantity} */}
-                    <div className="d-flex align-items-center">
+                    <div className="d-flex align-items-center justify-content-center flex-wrap gap-2">
                       <button
-                        className="btn btn-sm btn-secondary me-2"
+                        className="btn btn-sm btn-outline-secondary"
                         onClick={() => decreaseQty(item.id)}
                       >
                         -
                       </button>
                       <span>{item.quantity}</span>
                       <button
-                        className="btn btn-sm btn-secondary ms-2"
+                        className="btn btn-sm btn-outline-secondary"
                         onClick={() => increaseQty(item.id)}
                       >
                         +
@@ -68,7 +63,7 @@ const Cart = () => {
                   </td>
                   <td>
                     <button
-                      className="btn btn-danger btn-sm"
+                      className="btn btn-sm btn-outline-danger"
                       onClick={() => handleRemove(item)}
                     >
                       Remove
@@ -88,7 +83,14 @@ const Cart = () => {
           </table>
         </div>
       )}
-      <Link to="/checkout" className="btn btn-success mt-3">Proceed to Checkout</Link>
+
+      {cartItems.length > 0 && (
+        <div className="text-center mt-4">
+          <Link to="/checkout" className="btn btn-success btn-lg">
+            Proceed to Checkout
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

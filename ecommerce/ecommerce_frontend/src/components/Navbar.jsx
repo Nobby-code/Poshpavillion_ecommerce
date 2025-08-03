@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../pages/CartContext";
 import { useState } from "react";
-
 import { FaUser, FaShoppingCart, FaPhoneAlt } from "react-icons/fa";
 
 const Navbar = () => {
@@ -11,7 +10,6 @@ const Navbar = () => {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
-  // Function to handle search
   const handleSearch = (e) => {
     e.preventDefault();
     if (query.trim() !== "") {
@@ -20,11 +18,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light px-3 py-4 border-bottom">
+    <nav className="navbar navbar-expand-lg navbar-light px-3 py-3 border-bottom bg-white shadow-sm sticky-top">
       <div className="container-fluid">
         {/* Branding */}
-        <a className="navbar-brand fw-bold text-dark fs-2" href="/">
-          Posh pavillion Fashion
+        <a className="navbar-brand fw-bold text-dark fs-3" href="/">
+          Posh Pavillion Fashion
         </a>
 
         {/* Mobile toggle */}
@@ -40,9 +38,9 @@ const Navbar = () => {
         {/* Navbar content */}
         <div className="collapse navbar-collapse" id="navbarContent">
           {/* Search Bar */}
-          <form className="d-flex mx-auto w-50" onSubmit={handleSearch}>
+          <form className="d-flex mx-auto w-100 w-md-75 w-lg-50 my-3 my-lg-0" onSubmit={handleSearch}>
             <input
-              className="form-control me-2 py-3 fs-4 bg-light"
+              className="form-control me-2 py-2 fs-5 bg-light"
               type="search"
               placeholder="Search products…"
               aria-label="Search"
@@ -50,7 +48,7 @@ const Navbar = () => {
               onChange={(e) => setQuery(e.target.value)}
             />
             <button
-              className="btn btn-outline-primary fw-bold bg-primary text-white px-5 fs-5"
+              className="btn btn-primary fw-bold px-4 fs-5"
               type="submit"
             >
               Search
@@ -58,17 +56,17 @@ const Navbar = () => {
           </form>
 
           {/* Right side */}
-          <ul className="navbar-nav ms-auto align-items-center gap-3">
+          <ul className="navbar-nav ms-auto align-items-lg-center gap-3 mt-3 mt-lg-0">
             {/* Help */}
-            <li className="nav-item text-secondary small">
+            <li className="nav-item text-secondary small text-center text-lg-start">
               <div>
                 <strong>Need Help?</strong>
                 <br />
                 <a
                   href="tel:+254758543195"
-                  className="text-decoration-none text-dark fw-bold fs-5"
+                  className="text-decoration-none text-dark fw-bold fs-6"
                 >
-                  <FaPhoneAlt />
+                  <FaPhoneAlt className="me-1" />
                   +254 13627939
                 </a>
               </div>
@@ -77,10 +75,10 @@ const Navbar = () => {
             {/* My Account */}
             <li className="nav-item">
               <a
-                className="nav-link d-flex align-items-centerv fs-5 px-4"
+                className="nav-link d-flex align-items-center fs-5 px-3"
                 href="#"
               >
-                <FaUser className="me-1" /> Log In
+                <FaUser className="me-2" /> Log In
               </a>
             </li>
 
@@ -90,25 +88,14 @@ const Navbar = () => {
                 to="/cart"
                 className="nav-link d-flex align-items-center fs-5"
               >
-                <FaShoppingCart className="me-1" />
+                <FaShoppingCart className="me-2" />
                 <span>Cart</span>
-                <span className="badge bg-danger ms-1">{totalItems}</span>
+                <span className="badge bg-danger ms-2">{totalItems}</span>
               </Link>
             </li>
           </ul>
         </div>
       </div>
-
-      {/* Lower Nav Links */}
-      {/* <div className="bg-primary text-white py-1 px-3">
-        <div className="container d-flex gap-4">
-          <a href="#" className="text-white text-decoration-none">Home</a>
-          <a href="#" className="text-white text-decoration-none">Categories <span className="badge bg-warning text-dark">SALE</span></a>
-          <a href="#" className="text-white text-decoration-none">Products <span className="badge bg-danger">HOT</span></a>
-          <a href="#" className="text-white text-decoration-none">Top Deals</a>
-          <a href="#" className="text-white text-decoration-none">Top Offers!</a>
-        </div>
-      </div> */}
     </nav>
   );
 };
